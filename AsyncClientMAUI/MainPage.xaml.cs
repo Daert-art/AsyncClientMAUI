@@ -4,12 +4,12 @@ namespace AsyncClientMAUI
 {
     public partial class MainPage : ContentPage
     {
-        private NetworkModule networkModule;
+        private ClientNetworkModule networkModule;
 
         public MainPage()
         {
             InitializeComponent();
-            networkModule = new NetworkModule(AddLog, MessageReceived);
+            networkModule = new ClientNetworkModule(AddLog, MessageReceived);
         }
 
         private void OnConnectClicked(object sender, EventArgs e)
@@ -27,7 +27,10 @@ namespace AsyncClientMAUI
 
         private void MessageReceived(string message)
         {
-            AddLog($"Received from server: {message}");
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                AddLog($"Received from server: {message}");
+            });
         }
 
         private void AddLog(string message)
